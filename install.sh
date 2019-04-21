@@ -29,7 +29,7 @@ SOFTWARE.'
 echo ''
 echo 'Installation will continue in 3 seconds...'
 echo ''
-echo -e "\033[1;31mVERSION: 2019-04-12\033[0m"
+echo -e "\033[1;31mVERSION: 2019-04-21\033[0m"
 echo -e "\033[1;31mFHEM 5.9\033[0m"
 sleep 3
 
@@ -40,6 +40,7 @@ if [ "$(id -u)" != "0" ]; then
   exit 1
 fi
 
+echo 'Step 1:' 
 echo "Installing dependencies..."
 echo "=========================="
 apt update
@@ -50,13 +51,16 @@ ntpdate -u de.pool.ntp.org
 cpan Crypt::Cipher::AES
 cpan Crypt::ECB
 
-
+echo 'Step 2:' 
 echo -e '\033[5mFHEM installieren\033[0m'
 echo "=========================="
 cd /tmp
 wget http://fhem.de/fhem-5.9.deb
 sudo dpkg -i fhem-5.9.deb
 
+echo 'Step 3:'
+echo "Tweaks"
+echo "========================"
 if grep gpu_mem /boot/config.txt; then
   echo "Not changing GPU memory since it's already set"
 else
@@ -80,8 +84,6 @@ echo "# disable HDMI audio" >> /boot/config.txt
 echo "hdmi_drive=1" >> /boot/config.txt
 fi
 
-echo "Some Tweaks"
-echo "========================"
 echo "" >> /boot/config.txt
 echo "# disable the splash screen" >> /boot/config.txt
 echo "disable_splash=1" >> /boot/config.txt
@@ -96,9 +98,10 @@ echo "# activating the hardware watchdog" >> /boot/config.txt
 echo "dtparam=watchdog=on" >> /boot/config.txt
 
 
-
 # enable log-rotation
-echo 'Step X: enable logrotation'
+echo 'Step 4:'
+echo 'Logfilerotation aktivieren'
+echo 'enable logrotation'
 echo -n -e '\033[7mSoll das Logfile automatisch nach 20 Tagen überschrieben werden? [J/n]\033[0m'
 echo -n 'Do you want to set up Log-Rotation after 20 days? [Y/n]\033[0m'
 read logrotationdecision
@@ -126,7 +129,7 @@ else
 fi
 
 # enable additional admin programs
-echo 'Step X: Optionales Admin Programm'
+echo 'Step 5: Optionales Admin Programm'
 echo 'Installation of optional Raspberry-Config UI: Webmin (recommend)'
 echo -n -e '\033[7mMöchten Sie Webmin installieren (empfohlen) [J/n]\033[0m'
 echo -n -e '\033[36mDo you want to install Webmin [Y/n]\033[0m'
@@ -148,17 +151,38 @@ else
     echo 'Invalid input!'
 fi
 
+# enable FHEM autostart
+echo 'Step 6:'
+echo 'FHEM Autostart'
+echo 'Enable FHEM autostart (recommend)'
+echo -n -e '\033[7mMöchten Sie; dass FHEM bei booten automatisch startet (empfohlen) [J/n]\033[0m'
+echo -n -e '\033[36mDo you want to enable FHEM autostart [Y/n]\033[0m'
+read autostartdecision
+
+if [[ $autostartdecision =~ (J|j|Y|y) ]]
+  then
+sudo cp /opt/fhem/contrib/init-scripts/fhem.service /etc/systemd/system/fhem.service
+sudo systemtctl enable fhem.service
+sudo systemctl daemon-reload
+elif [[ $autostartdecision =~ (n) ]]
+  then
+    echo 'Es wurde nichts verändert'
+    echo -e '\033[36mNo modifications was made\033[0m'
+else
+    echo 'Invalid input!'
+fi
+
 echo 'Auf Ihrem Raspberry wurde FHEM installiert'
 echo 'https://raw.githubusercontent.com/steigerbalett/FHEM-RPi-install/master/rpi-install.sh'
 echo ''
-echo -e "\033[36mAccess FHEM: https://`hostname -I`:8083\033[0m"
-echo -e "\033[36mAccess the Raspi-Config-UI Webmin at: https://`hostname -I`:10000\033[0m"
+echo -e "\033[36mAccess FHEM: http://`hostname -I`:8083\033[0m"
+echo -e "\033[36mAccess the Raspi-Config-UI Webmin at: http\033[42ms\033[0m\033[1;31m://`hostname -I`:10000\033[0m"
 echo -e "\033[36mwith user: pi and your password (raspberry)\033[0m"
 echo ''
 echo ''
-echo -e "\033[1;31mLoggen Sie sich in FHEM ein unter: https://`hostname -I`:8083\033[0m"
+echo -e "\033[1;31mLoggen Sie sich in FHEM ein unter: http://`hostname -I`:8083\033[0m"
 echo ''
-echo -e "\033[1;31mLoggen Sie sich in die Raspi-Config-UI Webmin ein: https://`hostname -I`:10000\033[0m"
+echo -e "\033[1;31mLoggen Sie sich in die Raspi-Config-UI Webmin ein: http\033[42ms\033[0m\033[1;31m://`hostname -I`:10000\033[0m"
 echo -e "\033[1;31mMit Ihrem Benutzer: pi  und Passwort: (raspberry)\033[0m"
 echo ''
 # reboot the raspi
