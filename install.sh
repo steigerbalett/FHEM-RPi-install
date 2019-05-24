@@ -29,7 +29,7 @@ SOFTWARE.'
 echo ''
 echo 'Installation will continue in 3 seconds...'
 echo ''
-echo -e "\033[1;31mVERSION: 2019-04-21\033[0m"
+echo -e "\033[1;31mVERSION: 2019-05-24\033[0m"
 echo -e "\033[1;31mFHEM 5.9\033[0m"
 sleep 3
 
@@ -97,39 +97,8 @@ echo "" >> /boot/config.txt
 echo "# activating the hardware watchdog" >> /boot/config.txt
 echo "dtparam=watchdog=on" >> /boot/config.txt
 
-
-# enable log-rotation
-echo 'Step 4:'
-echo 'Logfilerotation aktivieren'
-echo 'enable logrotation'
-echo -n -e '\033[7mSoll das Logfile automatisch nach 20 Tagen überschrieben werden? [J/n]\033[0m'
-echo -n 'Do you want to set up Log-Rotation after 20 days? [Y/n]\033[0m'
-read logrotationdecision
-
-if [[ $logrotationdecision =~ (J|j|Y|y) ]]
-  then
-sudo apt install logrotate -y
-sudo bash -c 'cat &gt;&gt; /etc/logrotate.d/unifi &lt;&lt; EOF
-/var/log/unifi/*.log {
-    rotate 20
-    daily
-    missingok
-    notifempty
-    compress
-    delaycompress
-    copytruncate
-}
-EOF'
-elif [[ $logrotationdecision =~ (n) ]]
-  then
-    echo 'Es wurde nichts verändert'
-    echo -e '\033[36mNo modifications was made\033[0m'
-else
-    echo 'Invalid input!'
-fi
-
 # enable additional admin programs
-echo 'Step 5: Optionales Admin Programm'
+echo 'Step 4: Optionales Admin Programm'
 echo 'Installation of optional Raspberry-Config UI: Webmin (recommend)'
 echo -n -e '\033[7mMöchten Sie Webmin installieren (empfohlen) [J/n]\033[0m'
 echo -n -e '\033[36mDo you want to install Webmin [Y/n]\033[0m'
@@ -152,7 +121,7 @@ else
 fi
 
 # enable FHEM autostart
-echo 'Step 6:'
+echo 'Step 5:'
 echo 'FHEM Autostart'
 echo 'Enable FHEM autostart (recommend)'
 echo -n -e '\033[7mMöchten Sie; dass FHEM bei booten automatisch startet (empfohlen) [J/n]\033[0m'
