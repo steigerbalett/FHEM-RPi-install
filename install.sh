@@ -1,7 +1,7 @@
 #!/bin/sh
 
 # Error out if anything fails.
-set -e
+#set -e
 
 #License
 clear
@@ -96,6 +96,12 @@ echo "========================"
 echo "" >> /boot/config.txt
 echo "# activating the hardware watchdog" >> /boot/config.txt
 echo "dtparam=watchdog=on" >> /boot/config.txt
+
+echo "Disable search for SD after USB boot"
+echo "========================"
+echo "" >> /boot/config.txt
+echo "# stopp searching for SD-Card after boot" >> /boot/config.txt
+echo "dtoverlay=sdtweak,poll_once" >> /boot/config.txt
 
 # enable additional admin programs
 echo 'Step 4: Optionales Admin Programm'
