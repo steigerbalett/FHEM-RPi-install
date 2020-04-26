@@ -29,8 +29,8 @@ SOFTWARE.'
 echo ''
 echo 'Installation will continue in 3 seconds...'
 echo ''
-echo -e "\033[1;31mVERSION: 2019-10-23\033[0m"
-echo -e "\033[1;31mFHEM 5.9\033[0m"
+echo -e "\033[1;31mVERSION: 2020-04-26\033[0m"
+echo -e "\033[1;31mFHEM 6.0\033[0m"
 sleep 3
 
 # Make sure script is run as root.
@@ -56,8 +56,8 @@ echo 'Step 2:'
 echo -e '\033[5mFHEM installieren\033[0m'
 echo "=========================="
 cd /tmp
-wget http://fhem.de/fhem-5.9.deb
-sudo dpkg -i fhem-5.9.deb
+wget http://fhem.de/fhem-6.0.deb
+sudo dpkg -i fhem-6.0.deb
 
 echo 'Step 3:'
 echo "Tweaks"
