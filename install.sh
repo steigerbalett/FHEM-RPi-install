@@ -29,7 +29,7 @@ SOFTWARE.'
 echo ''
 echo 'Installation will continue in 3 seconds...'
 echo ''
-echo -e "\033[1;31mVERSION: 2020-05-27\033[0m"
+echo -e "\033[1;31mVERSION: 2020-08-22\033[0m"
 echo -e "\033[1;31mFHEM 6.0\033[0m"
 sleep 3
 
@@ -58,6 +58,8 @@ echo "=========================="
 cd /tmp
 wget http://fhem.de/fhem-6.0.deb
 sudo dpkg -i fhem-6.0.deb
+# User manuell hinzufügen
+sudo useradd --system --home /opt/fhem --gid dialout --shell /bin/false fhem
 
 echo 'Step 3:'
 echo "Tweaks"
@@ -137,7 +139,7 @@ read autostartdecision
 
 if [[ $autostartdecision =~ (J|j|Y|y) ]]
   then
-sudo cp /opt/fhem/contrib/init-scripts/fhem.service /etc/systemd/system/fhem.service
+sudo cp /opt/fhem/contrib/init-scripts/fhem.service /etc/systemd/system/
 sudo systemtctl enable fhem.service
 sudo systemctl daemon-reload
 elif [[ $autostartdecision =~ (n) ]]
