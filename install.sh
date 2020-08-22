@@ -47,21 +47,24 @@ apt update
 apt -y full-upgrade
 apt -y install perl-base libdevice-serialport-perl libwww-perl libio-socket-ssl-perl libcgi-pm-perl libjson-perl sqlite3 libdbd-sqlite3-perl libtext-diff-perl libtimedate-perl libmail-imapclient-perl libgd-graph-perl libtext-csv-perl libxml-simple-perl liblist-moreutils-perl ttf-liberation libimage-librsvg-perl libgd-text-perl libsocket6-perl libio-socket-inet6-perl libmime-base64-perl libimage-info-perl libusb-1.0-0-dev libnet-server-perl
 apt -y install apt-transport-https ntpdate socat libnet-telnet-perl libcrypt-rijndael-perl libdatetime-format-strptime-perl libsoap-lite-perl libjson-xs-perl libxml-simple-perl libdigest-md5-perl libdigest-md5-file-perl liblwp-protocol-https-perl liblwp-protocol-http-socketunix-perl libio-socket-multicast-perl libcrypt-cbc-perl libcrypt-ecb-perl libtypes-path-tiny-perl librpc-xml-perl libdatetime-perl libmodule-pluggable-perl libreadonly-perl libjson-maybexs-perl
-ntpdate -u de.pool.ntp.org
 sudo cpan install CPAN
 cpan Crypt::Cipher::AES
 cpan Crypt::ECB
+ntpdate -u de.pool.ntp.org
 
-echo 'Step 2:' 
-echo -e '\033[5mFHEM installieren\033[0m'
-echo "=========================="
-cd /tmp
-wget http://fhem.de/fhem-6.0.deb
-sudo dpkg -i fhem-6.0.deb
-# User manuell hinzufügen
-sudo useradd --system --home /opt/fhem --gid dialout --shell /bin/false fhem
+# Einstellen der Zeitzone und Zeitsynchronisierung per Internet: Berlin
+sudo timedatectl set-timezone Europe/Berlin
+sudo timedatectl set-ntp true
 
-echo 'Step 3:'
+# Konfigurieren der lokale Sprache: deutsch 
+sudo sed -i -e 's/# de_DE.UTF-8 UTF-8/de_DE.UTF-8 UTF-8/' /etc/locale.gen 
+sudo locale-gen 
+sudo localectl set-locale LANG=de_DE.UTF-8 LANGUAGE=de_DE
+
+# Hostname setzen
+hostnamectl set-hostname fhempi
+
+echo 'Step 2:'
 echo "Tweaks"
 echo "========================"
 if grep gpu_mem /boot/config.txt; then
@@ -106,6 +109,15 @@ echo "" >> /boot/config.txt
 echo "# stopp searching for SD-Card after boot" >> /boot/config.txt
 echo "dtoverlay=sdtweak,poll_once" >> /boot/config.txt
 
+echo 'Step 3:' 
+echo -e '\033[5mFHEM installieren\033[0m'
+echo "=========================="
+
+sudo wget -qO - http://debian.fhem.de/archive.key | apt-key add -
+echo "deb http://debian.fhem.de/nightly/ /" >> /etc/apt/sources.list
+sudo apt update
+sudo apt install fhem
+
 # enable additional admin programs
 echo 'Step 4: Optionales Admin Programm'
 echo 'Installation of optional Raspberry-Config UI: Webmin (recommend)'
@@ -129,20 +141,53 @@ else
     echo 'Invalid input!'
 fi
 
-# enable FHEM autostart
+# Prepare for piVCCU
 echo 'Step 5:'
-echo 'FHEM Autostart'
-echo 'Enable FHEM autostart (recommend)'
-echo -n -e '\033[7mMöchten Sie; dass FHEM bei booten automatisch startet (empfohlen) [J/n]\033[0m'
-echo -n -e '\033[36mDo you want to enable FHEM autostart [Y/n]\033[0m'
-read autostartdecision
+echo 'Prepare: piVCCU for Homematic'
+echo 'Do you want to use piVCCU on this RaspberryPi?'
+echo -n -e '\033[7mMöchten Sie piVCCU auf diesem RaspberryPi nutzen? [J/n]\033[0m'
+echo -n -e '\033[36mDo you want to use piVCCU on this device? [Y/n]\033[0m'
+read pivccudecision
 
-if [[ $autostartdecision =~ (J|j|Y|y) ]]
+if [[ $pivccudecision =~ (J|j|Y|y|z) ]]
   then
-sudo cp /opt/fhem/contrib/init-scripts/fhem.service /etc/systemd/system/
-sudo systemtctl enable fhem.service
-sudo systemctl daemon-reload
-elif [[ $autostartdecision =~ (n) ]]
+sudo bash -c 'cat << EOT >> /boot/config.txt
+dtoverlay=pi3-miniuart-bt
+enable_uart=1
+force_turbo=1
+core_freq=250
+EOT'
+
+sudo wget -q -O - https://www.pivccu.de/piVCCU/public.key | sudo apt-key add -
+sudo bash -c 'echo "deb https://www.pivccu.de/piVCCU stable main" > /etc/apt/sources.list.d/pivccu.list'
+sudo apt update
+sudo apt install build-essential bison flex libssl-dev
+sudo apt install raspberrypi-kernel-headers pivccu-modules-dkms
+sudo apt install pivccu-modules-raspberrypi
+sudo sed -i /boot/cmdline.txt -e "s/console=serial0,[0-9]\+ //"
+sudo sed -i /boot/cmdline.txt -e "s/console=ttyAMA0,[0-9]\+ //"
+sudo apt remove dhcpcd5
+sudo apt install bridge-utils
+sudo bash -c 'cat << EOT > /etc/network/interfaces
+source-directory /etc/network/interfaces.d
+
+auto lo
+iface lo inet loopback
+
+iface eth0 inet manual
+
+auto br0
+iface br0 inet dhcp
+  bridge_ports eth0
+EOT'
+
+echo 'Installieren sie nach dem Neustart piVCCU mit dem Befehl:'
+echo 'sudo apt install pivccu3'
+echo ''
+echo 'Start installation of piVCCU after reboot with:'
+echo 'sudo apt install pivccu3'
+
+elif [[ $pivccudecision =~ (n) ]]
   then
     echo 'Es wurde nichts verändert'
     echo -e '\033[36mNo modifications was made\033[0m'
