@@ -45,7 +45,7 @@ echo "Installing dependencies..."
 echo "=========================="
 apt update
 apt -y full-upgrade
-apt -y install perl-base libdevice-serialport-perl libwww-perl libio-socket-ssl-perl libcgi-pm-perl libjson-perl sqlite3 libdbd-sqlite3-perl libtext-diff-perl libtimedate-perl libmail-imapclient-perl libgd-graph-perl libtext-csv-perl libxml-simple-perl liblist-moreutils-perl ttf-liberation libimage-librsvg-perl libgd-text-perl libsocket6-perl libio-socket-inet6-perl libmime-base64-perl libimage-info-perl libusb-1.0-0-dev libnet-server-perl
+apt -y install perl-base libdevice-serialport-perl libwww-perl libio-socket-ssl-perl libcgi-pm-perl libjson-perl sqlite3 libdbd-sqlite3-perl libtext-diff-perl libtimedate-perl libmail-imapclient-perl libgd-graph-perl libtext-csv-perl libxml-simple-perl liblist-moreutils-perl ttf-liberation libimage-librsvg-perl libgd-text-perl libsocket6-perl libio-socket-inet6-perl libmime-base64-perl libimage-info-perl libusb-1.0-0-dev libnet-server-perl vlan
 apt -y install apt-transport-https ntpdate socat libnet-telnet-perl libcrypt-rijndael-perl libdatetime-format-strptime-perl libsoap-lite-perl libjson-xs-perl libxml-simple-perl libdigest-md5-perl libdigest-md5-file-perl liblwp-protocol-https-perl liblwp-protocol-http-socketunix-perl libio-socket-multicast-perl libcrypt-cbc-perl libcrypt-ecb-perl libtypes-path-tiny-perl librpc-xml-perl libdatetime-perl libmodule-pluggable-perl libreadonly-perl libjson-maybexs-perl
 sudo cpan install CPAN
 cpan Crypt::Cipher::AES
@@ -120,8 +120,11 @@ sudo apt install fhem
 
 # enable additional admin programs
 echo 'Step 4: Optionales Admin Programm'
+echo ''
 echo 'Installation of optional Raspberry-Config UI: Webmin (recommend)'
+echo ''
 echo -n -e '\033[7mMöchten Sie Webmin installieren (empfohlen) [J/n]\033[0m'
+echo ''
 echo -n -e '\033[36mDo you want to install Webmin [Y/n]\033[0m'
 read webmindecision
 
@@ -144,8 +147,11 @@ fi
 # Prepare for piVCCU
 echo 'Step 5:'
 echo 'Prepare: piVCCU for Homematic'
+echo ''
 echo 'Do you want to use piVCCU on this RaspberryPi?'
+echo ''
 echo -n -e '\033[7mMöchten Sie piVCCU auf diesem RaspberryPi nutzen? [J/n]\033[0m'
+echo ''
 echo -n -e '\033[36mDo you want to use piVCCU on this device? [Y/n]\033[0m'
 read pivccudecision
 
@@ -181,6 +187,10 @@ iface br0 inet dhcp
   bridge_ports eth0
 EOT'
 
+echo ''
+echo ''
+echo ''
+echo ''
 echo 'Installieren sie nach dem Neustart piVCCU mit dem Befehl:'
 echo 'sudo apt install pivccu3'
 echo ''
@@ -194,23 +204,33 @@ elif [[ $pivccudecision =~ (n) ]]
 else
     echo 'Invalid input!'
 fi
-
+echo ''
+echo ''
+echo ''
+echo '##########################################'
+echo ''
 echo 'Auf Ihrem Raspberry wurde FHEM installiert'
+echo ''
 echo 'https://raw.githubusercontent.com/steigerbalett/FHEM-RPi-install/master/rpi-install.sh'
 echo ''
 echo -e "\033[36mAccess FHEM: http://`hostname -I`:8083\033[0m"
+echo ''
 echo -e "\033[36mAccess the Raspi-Config-UI Webmin at: http\033[42ms\033[0m\033[1;31m://`hostname -I`:10000\033[0m"
+echo ''
 echo -e "\033[36mwith user: pi and your password (raspberry)\033[0m"
 echo ''
 echo ''
 echo -e "\033[1;31mLoggen Sie sich in FHEM ein unter: http://`hostname -I`:8083\033[0m"
 echo ''
 echo -e "\033[1;31mLoggen Sie sich in die Raspi-Config-UI Webmin ein: http\033[42ms\033[0m\033[1;31m://`hostname -I`:10000\033[0m"
+echo ''
 echo -e "\033[1;31mMit Ihrem Benutzer: pi  und Passwort: (raspberry)\033[0m"
 echo ''
 # reboot the raspi
 echo -e '\033[7mSoll der RaspberryPi jetzt automatisch neu starten?\033[0m'
+echo ''
 echo -e '\033[36mShould the the RaspberryPi now reboot directly or do you do this manually later?\033[0m'
+echo ''
 echo -n -e '\033[36mDo you want to reboot now [Y/n]\033[0m'
 read rebootdecision
 
