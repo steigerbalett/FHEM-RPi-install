@@ -50,6 +50,9 @@ apt -y install apt-transport-https ntpdate socat libnet-telnet-perl libcrypt-rij
 sudo cpan install CPAN
 cpan Crypt::Cipher::AES
 cpan Crypt::ECB
+sudo cpan App::cpanminus
+sudo cpanm Protocol::WebSocket
+sudo cpanm JSON
 ntpdate -u de.pool.ntp.org
 
 # Einstellen der Zeitzone und Zeitsynchronisierung per Internet: Berlin
