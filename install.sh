@@ -65,7 +65,7 @@ sudo locale-gen
 sudo localectl set-locale LANG=de_DE.UTF-8 LANGUAGE=de_DE
 
 # Hostname setzen
-hostnamectl set-hostname fhempi
+sudo hostnamectl set-hostname fhempi
 
 echo 'Step 2:'
 echo "Tweaks"
