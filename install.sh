@@ -29,7 +29,7 @@ SOFTWARE.'
 echo ''
 echo 'Installation will continue in 3 seconds...'
 echo ''
-echo -e "\033[1;31mVERSION: 2020-08-22\033[0m"
+echo -e "\033[1;31mVERSION: 2021-02-23\033[0m"
 echo -e "\033[1;31mFHEM 6.0\033[0m"
 sleep 3
 
@@ -147,8 +147,29 @@ else
     echo 'Invalid input!'
 fi
 
+echo 'Step 5: Optionaler Dateiexplorer'
+echo ''
+echo 'Installation of optional Raspberry-Filemanager: Midnight Commander (recommend)'
+echo 'https://www.linode.com/docs/guides/how-to-install-midnight-commander/'
+echo ''
+echo -n -e '\033[7mMöchten Sie Midnight Commander installieren (empfohlen) [J/n]\033[0m'
+echo ''
+echo -n -e '\033[36mDo you want to install Midnight Commander [Y/n]\033[0m'
+read mcdecision
+
+if [[ $mcdecision =~ (J|j|Y|y) ]]
+  then
+sudo apt install mc -y
+elif [[ $mcdecision =~ (n) ]]
+  then
+    echo 'Es wurde nichts verändert'
+    echo -e '\033[36mNo modifications was made\033[0m'
+else
+    echo 'Invalid input!'
+fi
+
 # Prepare for piVCCU
-echo 'Step 5:'
+echo 'Step 6:'
 echo 'Prepare: piVCCU for Homematic'
 echo ''
 echo 'Do you want to use piVCCU on this RaspberryPi?'
@@ -222,12 +243,16 @@ echo -e "\033[36mAccess the Raspi-Config-UI Webmin at: http\033[42ms\033[0m\033[
 echo ''
 echo -e "\033[36mwith user: pi and your password (raspberry)\033[0m"
 echo ''
+echo -e "\033[1;31mYou could start Midnight Commander by typing: mc\033[0m"
+echo ''
 echo ''
 echo -e "\033[1;31mLoggen Sie sich in FHEM ein unter: http://`hostname -I`:8083\033[0m"
 echo ''
 echo -e "\033[1;31mLoggen Sie sich in die Raspi-Config-UI Webmin ein: http\033[42ms\033[0m\033[1;31m://`hostname -I`:10000\033[0m"
 echo ''
 echo -e "\033[1;31mMit Ihrem Benutzer: pi  und Passwort: (raspberry)\033[0m"
+echo ''
+echo -e "\033[1;31mMidnight Commander kann einfach gestartet werden mit: mc\033[0m"
 echo ''
 # reboot the raspi
 echo -e '\033[7mSoll der RaspberryPi jetzt automatisch neu starten?\033[0m'
