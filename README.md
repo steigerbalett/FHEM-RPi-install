@@ -1,5 +1,5 @@
 # FHEM-RPi-install
-Installscript for FHEM on RaspberryPi (with RaspiOS Buster (10) lite)
+Installscript for FHEM on RaspberryPi ([with Raspberry Pi OS 10 Lite](https://downloads.raspberrypi.org/raspios_lite_armhf_latest))
 
 cd /tmp
 
