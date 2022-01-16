@@ -3,22 +3,17 @@
 #set -e
 #License
 clear
-echo '                   GNU GENERAL PUBLIC LICENSE'
-echo ''
 echo '
-    FHEM-RPi-install
-    Copyright (c) 2019-2022 steigerbalett
+                   GNU GENERAL PUBLIC LICENSE
+                         FHEM-RPi-install
+              Copyright (c) 2019-2022 steigerbalett
 
-    This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
+This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
 
-    This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
 
-    You should have received a copy of the GNU General Public License along with this program; if not, see <http://www.gnu.org/licenses/>.
+For a copy of the GNU General Public License see <http://www.gnu.org/licenses/>.
 '
-echo ''
-echo ''
-echo ''
-echo 'Installation will continue in 3 seconds...'
 echo ''
 echo ''
 echo '███████╗██╗░░██╗███████╗███╗░░░███╗'
@@ -34,6 +29,8 @@ echo -e "\033[1;31mFHEM 6.1\033[0m"
 echo ''
 echo ''
 echo ''
+echo ''
+echo 'Installation will continue in 3 seconds...'
 sleep 3
 
 # Make sure script is run as root.
