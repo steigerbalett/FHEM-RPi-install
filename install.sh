@@ -1,8 +1,6 @@
 #!/bin/sh
-
 # Error out if anything fails.
 #set -e
-
 #License
 clear
 echo 'MIT License'
@@ -29,8 +27,20 @@ SOFTWARE.'
 echo ''
 echo 'Installation will continue in 3 seconds...'
 echo ''
-echo -e "\033[1;31mVERSION: 2021-02-23\033[0m"
+echo ''
+echo '███████╗██╗░░██╗███████╗███╗░░░███╗'
+echo '██╔════╝██║░░██║██╔════╝████╗░████║'
+echo '█████╗░░███████║█████╗░░██╔████╔██║'
+echo '██╔══╝░░██╔══██║██╔══╝░░██║╚██╔╝██║'
+echo '██║░░░░░██║░░██║███████╗██║░╚═╝░██║'
+echo '╚═╝░░░░░╚═╝░░╚═╝╚══════╝╚═╝░░░░░╚═╝'
+echo ''
+echo ''
+echo -e "\033[1;31mVERSION: 2022-01-16\033[0m"
 echo -e "\033[1;31mFHEM 6.0\033[0m"
+echo ''
+echo ''
+echo ''
 sleep 3
 
 # Make sure script is run as root.
@@ -47,7 +57,7 @@ apt update
 apt -y full-upgrade
 apt -y install perl-base libdevice-serialport-perl libwww-perl libio-socket-ssl-perl libcgi-pm-perl libjson-perl sqlite3 libdbd-sqlite3-perl libtext-diff-perl libtimedate-perl libmail-imapclient-perl libgd-graph-perl libtext-csv-perl libxml-simple-perl liblist-moreutils-perl ttf-liberation libimage-librsvg-perl libgd-text-perl libsocket6-perl libio-socket-inet6-perl libmime-base64-perl libimage-info-perl libusb-1.0-0-dev libnet-server-perl vlan
 apt -y install apt-transport-https ntpdate socat libnet-telnet-perl libcrypt-rijndael-perl libdatetime-format-strptime-perl libsoap-lite-perl libjson-xs-perl libxml-simple-perl libdigest-md5-perl libdigest-md5-file-perl liblwp-protocol-https-perl liblwp-protocol-http-socketunix-perl libio-socket-multicast-perl libcrypt-cbc-perl libcrypt-ecb-perl libtypes-path-tiny-perl librpc-xml-perl libdatetime-perl libmodule-pluggable-perl libreadonly-perl libjson-maybexs-perl
-apt -y install libcryptx-perl
+apt -y install libcryptx-perl libprotocol-websocket-perl
 
 ntpdate -u de.pool.ntp.org
 
@@ -210,7 +220,7 @@ EOT'
 echo ''
 echo ''
 echo ''
-echo ''
+echo 'Ein Neustart ist erforderlich um die Installation von piVCCU fortzusetzen'
 echo 'Installieren sie nach dem Neustart piVCCU mit dem Befehl:'
 echo 'sudo apt install pivccu3'
 echo ''
@@ -224,6 +234,8 @@ elif [[ $pivccudecision =~ (n) ]]
 else
     echo 'Invalid input!'
 fi
+sleep 3
+
 echo ''
 echo ''
 echo ''
