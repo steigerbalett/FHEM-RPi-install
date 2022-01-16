@@ -1,36 +1,36 @@
 #!/bin/sh
-
 # Error out if anything fails.
 #set -e
-
 #License
 clear
-echo 'MIT License'
+echo '
+                   GNU GENERAL PUBLIC LICENSE
+                         FHEM-RPi-install
+              Copyright (c) 2019-2022 steigerbalett
+
+This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
+
+This program is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the GNU General Public License for more details.
+
+For a copy of the GNU General Public License see <http://www.gnu.org/licenses/>.
+'
 echo ''
-echo 'Copyright (c) 2019 steigerbalett'
 echo ''
-echo 'Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:'
+echo '███████╗██╗░░██╗███████╗███╗░░░███╗'
+echo '██╔════╝██║░░██║██╔════╝████╗░████║'
+echo '█████╗░░███████║█████╗░░██╔████╔██║'
+echo '██╔══╝░░██╔══██║██╔══╝░░██║╚██╔╝██║'
+echo '██║░░░░░██║░░██║███████╗██║░╚═╝░██║'
+echo '╚═╝░░░░░╚═╝░░╚═╝╚══════╝╚═╝░░░░░╚═╝'
 echo ''
-echo 'The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.'
 echo ''
-echo 'THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.'
+echo -e "\033[1;31mVERSION: 2022-01-16\033[0m"
+echo -e "\033[1;31mFHEM 6.1\033[0m"
+echo ''
+echo ''
+echo ''
 echo ''
 echo 'Installation will continue in 3 seconds...'
-echo ''
-echo -e "\033[1;31mVERSION: 2021-02-23\033[0m"
-echo -e "\033[1;31mFHEM 6.0\033[0m"
 sleep 3
 
 # Make sure script is run as root.
@@ -47,7 +47,7 @@ apt update
 apt -y full-upgrade
 apt -y install perl-base libdevice-serialport-perl libwww-perl libio-socket-ssl-perl libcgi-pm-perl libjson-perl sqlite3 libdbd-sqlite3-perl libtext-diff-perl libtimedate-perl libmail-imapclient-perl libgd-graph-perl libtext-csv-perl libxml-simple-perl liblist-moreutils-perl ttf-liberation libimage-librsvg-perl libgd-text-perl libsocket6-perl libio-socket-inet6-perl libmime-base64-perl libimage-info-perl libusb-1.0-0-dev libnet-server-perl vlan
 apt -y install apt-transport-https ntpdate socat libnet-telnet-perl libcrypt-rijndael-perl libdatetime-format-strptime-perl libsoap-lite-perl libjson-xs-perl libxml-simple-perl libdigest-md5-perl libdigest-md5-file-perl liblwp-protocol-https-perl liblwp-protocol-http-socketunix-perl libio-socket-multicast-perl libcrypt-cbc-perl libcrypt-ecb-perl libtypes-path-tiny-perl librpc-xml-perl libdatetime-perl libmodule-pluggable-perl libreadonly-perl libjson-maybexs-perl
-apt -y install libcryptx-perl avrdude
+apt -y install libcryptx-perl avrdude libprotocol-websocket-perl
 
 ntpdate -u de.pool.ntp.org
 
@@ -210,7 +210,7 @@ EOT'
 echo ''
 echo ''
 echo ''
-echo ''
+echo 'Ein Neustart ist erforderlich um die Installation von piVCCU fortzusetzen'
 echo 'Installieren sie nach dem Neustart piVCCU mit dem Befehl:'
 echo 'sudo apt install pivccu3'
 echo ''
@@ -224,6 +224,8 @@ elif [[ $pivccudecision =~ (n) ]]
 else
     echo 'Invalid input!'
 fi
+sleep 3
+
 echo ''
 echo ''
 echo ''
