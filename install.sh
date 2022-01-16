@@ -37,7 +37,7 @@ echo '╚═╝░░░░░╚═╝░░╚═╝╚══════╝�
 echo ''
 echo ''
 echo -e "\033[1;31mVERSION: 2022-01-16\033[0m"
-echo -e "\033[1;31mFHEM 6.0\033[0m"
+echo -e "\033[1;31mFHEM 6.1\033[0m"
 echo ''
 echo ''
 echo ''
