@@ -1,7 +1,6 @@
 # FHEM-RPi-install
 ## DE
-Installationsscript für eine automatische Installation von FHEM und vorbereitende Installation für diverse Zusatzmodule für den RaspberryPi ([mit Raspberry Pi OS 10 Lite](https://downloads.raspberrypi.org/raspios_lite_armhf_latest))
-
+Installationsscript für eine automatische Installation von ([FHEM](https://forum.fhem.de)) und vorbereitende Installation für diverse Zusatzmodule auf einem RaspberryPi ([mit Raspberry Pi OS 11 Lite (Bullseye)](https://downloads.raspberrypi.org/raspios_lite_armhf_latest))
 Einfach per SSH auf den RaspberryPi oder direkt auf dem RaspberryPi folgendes eingeben:
 ```
 cd /tmp
@@ -15,7 +14,7 @@ Nach der Installation & einem Reboot kann man FHEM im Browser von einem anderen 
 
 
 ## EN
-Installscript for FHEM on RaspberryPi ([with Raspberry Pi OS 10 Lite](https://downloads.raspberrypi.org/raspios_lite_armhf_latest))
+Installscript for ([FHEM](https://forum.fhem.de)) on RaspberryPi ([with Raspberry Pi OS 11 Lite (Bullseye)](https://downloads.raspberrypi.org/raspios_lite_armhf_latest))
 
 Just type in the command shell:
 ```
