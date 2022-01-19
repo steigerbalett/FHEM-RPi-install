@@ -60,9 +60,6 @@ sudo sed -i -e 's/# de_DE.UTF-8 UTF-8/de_DE.UTF-8 UTF-8/' /etc/locale.gen
 sudo locale-gen 
 sudo localectl set-locale LANG=de_DE.UTF-8 LANGUAGE=de_DE
 
-# Hostname setzen
-sudo hostnamectl set-hostname fhempi
-
 echo 'Step 2:'
 echo "Tweaks"
 echo "========================"
@@ -225,6 +222,9 @@ else
     echo 'Invalid input!'
 fi
 sleep 3
+
+# Hostname setzen
+sudo hostnamectl set-hostname fhempi
 
 echo ''
 echo ''
