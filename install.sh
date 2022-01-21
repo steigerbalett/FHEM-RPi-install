@@ -103,52 +103,74 @@ sudo localectl set-locale LANG=de_DE.UTF-8 LANGUAGE=de_DE
 echo 'Step 2:'
 echo "Tweaks"
 echo "========================"
+echo ''
+echo "Decreasing GPU memory"
+echo "========================"
 if grep gpu_mem /boot/config.txt; then
   echo "Not changing GPU memory since it's already set"
 else
-  echo "Decreasing GPU memory"
-  echo "========================"
-  echo "" >> /boot/config.txt
   echo "# Decrease GPU memory because its headless not needed" >> /boot/config.txt
   echo "gpu_mem=16" >> /boot/config.txt
 fi
-
+echo ''
+echo "Turn off HDMI without connected Monitor"
+echo "========================"
 if grep hdmi_blanking=1 /boot/config.txt; then
   echo "HDMI tweak already set"
 else
-echo "Turn off HDMI without connected Monitor"
-echo "========================"
-echo "" >> /boot/config.txt
 echo "# Turn off HDMI without connected Monitor to reduce inteference with HomematicIP Devices" >> /boot/config.txt
 echo "hdmi_blanking=1" >> /boot/config.txt
-echo "" >> /boot/config.txt
-echo "# disable HDMI audio" >> /boot/config.txt
+fi
+echo ''
+echo "Turn off HDMI audio"
+echo "========================"
+if grep hdmi_drive=1 /boot/config.txt; then
+  echo "HDMI audio tweak already set"
+else
+echo "# Turn off HDMI Audio" >> /boot/config.txt
 echo "hdmi_drive=1" >> /boot/config.txt
 fi
-
+echo ''
+if disable_splash=1 /boot/config.txt; then
+  echo "Disable Splashscreen already set"
+else
 echo "" >> /boot/config.txt
 echo "# disable the splash screen" >> /boot/config.txt
 echo "disable_splash=1" >> /boot/config.txt
+fi
+echo ''
+if grep disable_overscan=1 /boot/config.txt; then
+  echo "Disable overscan already set"
+else
 echo "" >> /boot/config.txt
 echo "# disable overscan" >> /boot/config.txt
 echo "disable_overscan=1" >> /boot/config.txt
-
+fi
+echo ''
 echo "Enable Hardware watchdog"
 echo "========================"
+if grep dtparam=watchdog=on /boot/config.txt; then
+  echo "Watchdog already set"
+else
 echo "" >> /boot/config.txt
 echo "# activating the hardware watchdog" >> /boot/config.txt
 echo "dtparam=watchdog=on" >> /boot/config.txt
-
+fi
+echo ''
 echo "Disable search for SD after USB boot"
 echo "========================"
+if grep dtoverlay=sdtweak,poll_once /boot/config.txt; then
+  echo "SD-Tweak already set"
+else
 echo "" >> /boot/config.txt
 echo "# stopp searching for SD-Card after boot" >> /boot/config.txt
 echo "dtoverlay=sdtweak,poll_once" >> /boot/config.txt
-
+fi
+echo ''
 echo 'Step 3:' 
 echo -e '\033[5mFHEM installieren\033[0m'
 echo "=========================="
-
+echo ''
 sudo wget -qO - http://debian.fhem.de/archive.key | apt-key add -
 echo "deb http://debian.fhem.de/nightly/ /" >> /etc/apt/sources.list
 sudo apt update
