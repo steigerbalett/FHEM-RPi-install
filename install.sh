@@ -24,7 +24,7 @@ echo '██║░░░░░██║░░██║███████╗�
 echo '╚═╝░░░░░╚═╝░░╚═╝╚══════╝╚═╝░░░░░╚═╝'
 echo ''
 echo ''
-echo -e "\033[1;31mVERSION: 2022-01-20\033[0m"
+echo -e "\033[1;31mVERSION: 2022-01-22\033[0m"
 echo -e "\033[1;31mFHEM 6.1\033[0m"
 echo ''
 echo ''
@@ -122,13 +122,13 @@ echo "# Turn off HDMI without connected Monitor to reduce inteference with Homem
 echo "hdmi_blanking=1" >> /boot/config.txt
 fi
 echo ''
-echo "Turn off HDMI audio"
+echo "Turn on HDMI audio"
 echo "========================"
-if grep hdmi_drive=1 /boot/config.txt; then
+if grep hdmi_drive=2 /boot/config.txt; then
   echo "HDMI audio tweak already set"
 else
-echo "# Turn off HDMI Audio" >> /boot/config.txt
-echo "hdmi_drive=1" >> /boot/config.txt
+echo "# Turn on HDMI Audio" >> /boot/config.txt
+echo "hdmi_drive=2" >> /boot/config.txt
 fi
 echo ''
 if disable_splash=1 /boot/config.txt; then
