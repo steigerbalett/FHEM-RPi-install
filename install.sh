@@ -24,7 +24,7 @@ echo '██║░░░░░██║░░██║███████╗�
 echo '╚═╝░░░░░╚═╝░░╚═╝╚══════╝╚═╝░░░░░╚═╝'
 echo ''
 echo ''
-echo -e "\033[1;31mVERSION: 2022-01-16\033[0m"
+echo -e "\033[1;31mVERSION: 2022-01-22\033[0m"
 echo -e "\033[1;31mFHEM 6.1\033[0m"
 echo ''
 echo ''
@@ -39,6 +39,46 @@ if [ "$(id -u)" != "0" ]; then
     echo -e '\033[36mMust be run as root with sudo! Try: sudo ./install.sh\033[0m'
   exit 1
 fi
+
+# Checking Memory Requirements
+echo ''
+echo "Checking minimum system memory requirements ..."
+echo ''
+memtotal=$(cat /proc/meminfo | grep MemTotal | grep -o '[0-9]*')
+swaptotal=$(cat /proc/meminfo | grep SwapTotal | grep -o '[0-9]*')
+echo "Your total system memory is $memtotal"
+echo "Your total system swap is $swaptotal"
+totalmem=$(($memtotal + $swaptotal))
+echo "Your effective total system memory is $totalmem"
+
+if [[ $totalmem -lt 900000 ]]
+  then
+    echo 'You have low memory'
+  else
+    echo 'You have enough memory to meet the requirements! :-)'
+fi
+    echo ''
+    echo -n 'Do you want to create a 1 G swap file? [Y/n] '
+    echo ''
+    read swapfiledecision
+      if [[ $swapfiledecision =~ (Y|y) ]]
+        then
+          echo 'Creating 1 G swap file...'
+            sudo fallocate -l 1G /swapfile
+            sudo chmod 600 /swapfile
+            sudo mkswap /swapfile
+            sudo swapon /swapfile
+            sudo cp /etc/fstab /etc/fstab.bak
+            echo '/swapfile none swap sw 0 0' | sudo tee -a /etc/fstab > /dev/null
+          echo '1 G swap file successfully created!'
+      elif [[ $swapfiledecision =~ (n) ]]
+        then
+          echo 'No swap file was created!'
+      else
+        echo Input error!
+        echo No swap file was created!
+        echo Please start again
+      fi
 
 echo 'Step 1:' 
 echo "Installing dependencies..."
@@ -63,52 +103,74 @@ sudo localectl set-locale LANG=de_DE.UTF-8 LANGUAGE=de_DE
 echo 'Step 2:'
 echo "Tweaks"
 echo "========================"
+echo ''
+echo "Decreasing GPU memory"
+echo "========================"
 if grep gpu_mem /boot/config.txt; then
   echo "Not changing GPU memory since it's already set"
 else
-  echo "Decreasing GPU memory"
-  echo "========================"
-  echo "" >> /boot/config.txt
   echo "# Decrease GPU memory because its headless not needed" >> /boot/config.txt
   echo "gpu_mem=16" >> /boot/config.txt
 fi
-
+echo ''
+echo "Turn off HDMI without connected Monitor"
+echo "========================"
 if grep hdmi_blanking=1 /boot/config.txt; then
   echo "HDMI tweak already set"
 else
-echo "Turn off HDMI without connected Monitor"
-echo "========================"
-echo "" >> /boot/config.txt
 echo "# Turn off HDMI without connected Monitor to reduce inteference with HomematicIP Devices" >> /boot/config.txt
 echo "hdmi_blanking=1" >> /boot/config.txt
-echo "" >> /boot/config.txt
-echo "# disable HDMI audio" >> /boot/config.txt
-echo "hdmi_drive=1" >> /boot/config.txt
 fi
-
+echo ''
+echo "Turn on HDMI audio"
+echo "========================"
+if grep hdmi_drive=2 /boot/config.txt; then
+  echo "HDMI audio tweak already set"
+else
+echo "# Turn on HDMI Audio" >> /boot/config.txt
+echo "hdmi_drive=2" >> /boot/config.txt
+fi
+echo ''
+if disable_splash=1 /boot/config.txt; then
+  echo "Disable Splashscreen already set"
+else
 echo "" >> /boot/config.txt
 echo "# disable the splash screen" >> /boot/config.txt
 echo "disable_splash=1" >> /boot/config.txt
+fi
+echo ''
+if grep disable_overscan=1 /boot/config.txt; then
+  echo "Disable overscan already set"
+else
 echo "" >> /boot/config.txt
 echo "# disable overscan" >> /boot/config.txt
 echo "disable_overscan=1" >> /boot/config.txt
-
+fi
+echo ''
 echo "Enable Hardware watchdog"
 echo "========================"
+if grep dtparam=watchdog=on /boot/config.txt; then
+  echo "Watchdog already set"
+else
 echo "" >> /boot/config.txt
 echo "# activating the hardware watchdog" >> /boot/config.txt
 echo "dtparam=watchdog=on" >> /boot/config.txt
-
+fi
+echo ''
 echo "Disable search for SD after USB boot"
 echo "========================"
+if grep dtoverlay=sdtweak,poll_once /boot/config.txt; then
+  echo "SD-Tweak already set"
+else
 echo "" >> /boot/config.txt
 echo "# stopp searching for SD-Card after boot" >> /boot/config.txt
 echo "dtoverlay=sdtweak,poll_once" >> /boot/config.txt
-
+fi
+echo ''
 echo 'Step 3:' 
 echo -e '\033[5mFHEM installieren\033[0m'
 echo "=========================="
-
+echo ''
 sudo wget -qO - http://debian.fhem.de/archive.key | apt-key add -
 echo "deb http://debian.fhem.de/nightly/ /" >> /etc/apt/sources.list
 sudo apt update
