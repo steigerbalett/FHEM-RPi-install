@@ -27,7 +27,8 @@ echo ''
 echo -e "\033[1;31mVERSION: 2022-12-20\033[0m"
 echo -e "\033[1;31mFHEM 6.1\033[0m"
 echo ''
-echo ''
+echo 'Please update your RaspberryPi OS to newest version'
+echo 'with: sudo apt update && sudo apt full-upgrade'
 echo ''
 echo ''
 echo 'Installation will continue in 3 seconds...'
@@ -85,9 +86,11 @@ echo "Installing dependencies..."
 echo "=========================="
 apt update
 apt -y full-upgrade
-apt -y install perl-base libdevice-serialport-perl libwww-perl libio-socket-ssl-perl libcgi-pm-perl libjson-perl sqlite3 libdbd-sqlite3-perl libtext-diff-perl libtimedate-perl libmail-imapclient-perl libgd-graph-perl libtext-csv-perl libxml-simple-perl liblist-moreutils-perl ttf-liberation libimage-librsvg-perl libgd-text-perl libsocket6-perl libio-socket-inet6-perl libmime-base64-perl libimage-info-perl libusb-1.0-0-dev libnet-server-perl vlan
-apt -y install apt-transport-https ntpdate socat libnet-telnet-perl libcrypt-rijndael-perl libdatetime-format-strptime-perl libsoap-lite-perl libjson-xs-perl libxml-simple-perl libdigest-md5-perl libdigest-md5-file-perl liblwp-protocol-https-perl liblwp-protocol-http-socketunix-perl libio-socket-multicast-perl libcrypt-cbc-perl libcrypt-ecb-perl libtypes-path-tiny-perl librpc-xml-perl libdatetime-perl libmodule-pluggable-perl libreadonly-perl libjson-maybexs-perl
+apt -y install perl-base libdevice-serialport-perl libwww-perl libio-socket-ssl-perl libcgi-pm-perl libjson-perl sqlite3 libdbd-sqlite3-perl libtext-diff-perl libtimedate-perl libmail-imapclient-perl libgd-graph-perl libtext-csv-perl libxml-simple-perl liblist-moreutils-perl fonts-liberation libimage-librsvg-perl libgd-text-perl libsocket6-perl libio-socket-inet6-perl libmime-base64-perl libimage-info-perl libusb-1.0-0-dev libnet-server-perl
+apt -y install libdate-manip-perl libhtml-treebuilder-xpath-perl libmojolicious-perl libxml-bare-perl libauthen-oath-perl libconvert-base32-perl libmodule-pluggable-perl libnet-bonjour-perl libcrypt-urandom-perl nodejs npm libnet-dbus-perl
+apt -y install apt-transport-https ntpdate socat libnet-telnet-perl libcrypt-rijndael-perl libdatetime-format-strptime-perl libsoap-lite-perl libjson-xs-perl libxml-simple-perl libdigest-md5-file-perl liblwp-protocol-https-perl liblwp-protocol-http-socketunix-perl libio-socket-multicast-perl libcrypt-cbc-perl libcrypt-ecb-perl libtypes-path-tiny-perl librpc-xml-perl libdatetime-perl libmodule-pluggable-perl libreadonly-perl libjson-maybexs-perl
 apt -y install libcryptx-perl avrdude libprotocol-websocket-perl libcpanel-json-xs-perl libio-socket-inet6-perl libperl-prereqscanner-notquitelite-perl libimage-librsvg-perl
+apt -y install vlan
 
 ntpdate -u de.pool.ntp.org
 
@@ -171,8 +174,8 @@ echo 'Step 3:'
 echo -e '\033[5mFHEM installieren\033[0m'
 echo "=========================="
 echo ''
-wget -O- https://debian.fhem.de/archive.key | gpg --dearmor | sudo tee /usr/share/keyrings/debianfhemde-archive-keyring.gpg
-sudo deb [signed-by=/usr/share/keyrings/debianfhemde-archive-keyring.gpg] https://debian.fhem.de/nightly/
+wget -O- https://debian.fhem.de/archive.key | gpg --dearmor > /usr/share/keyrings/debianfhemde-archive-keyring.gpg
+sudo echo "deb [signed-by=/usr/share/keyrings/debianfhemde-archive-keyring.gpg] https://debian.fhem.de/nightly/ /" >> /etc/apt/sources.list
 sudo apt update
 sudo apt install fhem
 
@@ -251,8 +254,8 @@ sudo apt -y install raspberrypi-kernel-headers pivccu-modules-dkms
 sudo apt -y install pivccu-modules-raspberrypi
 sudo sed -i /boot/cmdline.txt -e "s/console=serial0,[0-9]\+ //"
 sudo sed -i /boot/cmdline.txt -e "s/console=ttyAMA0,[0-9]\+ //"
-sudo apt remove dhcpcd5
-sudo apt install bridge-utils
+sudo apt -y remove dhcpcd5
+sudo apt -y install bridge-utils
 sudo bash -c 'cat << EOT > /etc/network/interfaces
 source-directory /etc/network/interfaces.d
 
