@@ -171,8 +171,8 @@ echo 'Step 3:'
 echo -e '\033[5mFHEM installieren\033[0m'
 echo "=========================="
 echo ''
-sudo wget -qO - http://debian.fhem.de/archive.key | apt-key add -
-echo "deb http://debian.fhem.de/nightly/ /" >> /etc/apt/sources.list
+sudo wget -O- https://debian.fhem.de/archive.key | gpg --dearmor | sudo tee /usr/share/keyrings/debianfhemde-archive-keyring.gpg
+sudo deb [signed-by=/usr/share/keyrings/debianfhemde-archive-keyring.gpg] https://debian.fhem.de/nightly/ /
 sudo apt update
 sudo apt install fhem
 
