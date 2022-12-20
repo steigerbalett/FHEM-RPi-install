@@ -24,7 +24,7 @@ echo '██║░░░░░██║░░██║███████╗�
 echo '╚═╝░░░░░╚═╝░░╚═╝╚══════╝╚═╝░░░░░╚═╝'
 echo ''
 echo ''
-echo -e "\033[1;31mVERSION: 2022-05-03\033[0m"
+echo -e "\033[1;31mVERSION: 2022-12-20\033[0m"
 echo -e "\033[1;31mFHEM 6.1\033[0m"
 echo ''
 echo ''
@@ -171,8 +171,8 @@ echo 'Step 3:'
 echo -e '\033[5mFHEM installieren\033[0m'
 echo "=========================="
 echo ''
-sudo wget -O- https://debian.fhem.de/archive.key | gpg --dearmor | sudo tee /usr/share/keyrings/debianfhemde-archive-keyring.gpg
-sudo deb [signed-by=/usr/share/keyrings/debianfhemde-archive-keyring.gpg] https://debian.fhem.de/nightly/ /
+wget -O- https://debian.fhem.de/archive.key | gpg --dearmor | sudo tee /usr/share/keyrings/debianfhemde-archive-keyring.gpg
+sudo deb [signed-by=/usr/share/keyrings/debianfhemde-archive-keyring.gpg] https://debian.fhem.de/nightly/
 sudo apt update
 sudo apt install fhem
 
@@ -246,9 +246,9 @@ EOT'
 sudo wget -q -O - https://www.pivccu.de/piVCCU/public.key | sudo apt-key add -
 sudo bash -c 'echo "deb https://www.pivccu.de/piVCCU stable main" > /etc/apt/sources.list.d/pivccu.list'
 sudo apt update
-sudo apt install build-essential bison flex libssl-dev
-sudo apt install raspberrypi-kernel-headers pivccu-modules-dkms
-sudo apt install pivccu-modules-raspberrypi
+sudo apt -y install build-essential bison flex libssl-dev
+sudo apt -y install raspberrypi-kernel-headers pivccu-modules-dkms
+sudo apt -y install pivccu-modules-raspberrypi
 sudo sed -i /boot/cmdline.txt -e "s/console=serial0,[0-9]\+ //"
 sudo sed -i /boot/cmdline.txt -e "s/console=ttyAMA0,[0-9]\+ //"
 sudo apt remove dhcpcd5
@@ -286,7 +286,24 @@ fi
 sleep 3
 
 # Hostname setzen
+echo 'Step 7:'
+echo 'Change hostname'
+echo ''
+echo -n -e '\033[7mMöchten Sie den Hostnamen dieses RaspberryPi in fhempi ändern? [J/n]\033[0m'
+echo ''
+echo -n -e '\033[36mDDo you want to change the hostname to fhempi? [Y/n]\033[0m'
+read hostnamedecision
+if [[ $hostnamedecision =~ (J|j|Y|y|z) ]]
+  then
 sudo hostnamectl set-hostname fhempi
+elif [[ $hostnamedecision =~ (n) ]]
+  then
+    echo 'Es wurde nichts verändert'
+    echo -e '\033[36mNo modifications was made\033[0m'
+else
+    echo 'Invalid input!'
+fi
+sleep 3
 
 echo ''
 echo ''
