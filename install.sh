@@ -6,7 +6,7 @@ clear
 echo '
                    GNU GENERAL PUBLIC LICENSE
                          FHEM-RPi-install
-              Copyright (c) 2019-2022 steigerbalett
+              Copyright (c) 2019-2023 steigerbalett
 
 This program is free software; you can redistribute it and/or modify it under the terms of the GNU General Public License as published by the Free Software Foundation; either version 3 of the License, or (at your option) any later version.
 
@@ -24,10 +24,11 @@ echo '██║░░░░░██║░░██║███████╗�
 echo '╚═╝░░░░░╚═╝░░╚═╝╚══════╝╚═╝░░░░░╚═╝'
 echo ''
 echo ''
-echo -e "\033[1;31mVERSION: 2022-01-22\033[0m"
-echo -e "\033[1;31mFHEM 6.1\033[0m"
+echo -e "\033[1;31mVERSION: 2023-03-15\033[0m"
+echo -e "\033[1;31mFHEM 6.2\033[0m"
 echo ''
-echo ''
+echo 'Please update your RaspberryPi OS to newest version'
+echo 'with: sudo apt update && sudo apt full-upgrade'
 echo ''
 echo ''
 echo 'Installation will continue in 3 seconds...'
@@ -85,9 +86,12 @@ echo "Installing dependencies..."
 echo "=========================="
 apt update
 apt -y full-upgrade
-apt -y install perl-base libdevice-serialport-perl libwww-perl libio-socket-ssl-perl libcgi-pm-perl libjson-perl sqlite3 libdbd-sqlite3-perl libtext-diff-perl libtimedate-perl libmail-imapclient-perl libgd-graph-perl libtext-csv-perl libxml-simple-perl liblist-moreutils-perl ttf-liberation libimage-librsvg-perl libgd-text-perl libsocket6-perl libio-socket-inet6-perl libmime-base64-perl libimage-info-perl libusb-1.0-0-dev libnet-server-perl vlan
-apt -y install apt-transport-https ntpdate socat libnet-telnet-perl libcrypt-rijndael-perl libdatetime-format-strptime-perl libsoap-lite-perl libjson-xs-perl libxml-simple-perl libdigest-md5-perl libdigest-md5-file-perl liblwp-protocol-https-perl liblwp-protocol-http-socketunix-perl libio-socket-multicast-perl libcrypt-cbc-perl libcrypt-ecb-perl libtypes-path-tiny-perl librpc-xml-perl libdatetime-perl libmodule-pluggable-perl libreadonly-perl libjson-maybexs-perl
-apt -y install libcryptx-perl avrdude libprotocol-websocket-perl libdigest-crc-perl
+
+apt -y install perl-base libdevice-serialport-perl libwww-perl libio-socket-ssl-perl libcgi-pm-perl libjson-perl sqlite3 libdbd-sqlite3-perl libtext-diff-perl libtimedate-perl libmail-imapclient-perl libgd-graph-perl libtext-csv-perl libxml-simple-perl liblist-moreutils-perl fonts-liberation libimage-librsvg-perl libgd-text-perl libsocket6-perl libio-socket-inet6-perl libmime-base64-perl libimage-info-perl libusb-1.0-0-dev libnet-server-perl
+apt -y install libdate-manip-perl libhtml-treebuilder-xpath-perl libmojolicious-perl libxml-bare-perl libauthen-oath-perl libconvert-base32-perl libmodule-pluggable-perl libnet-bonjour-perl libcrypt-urandom-perl nodejs npm libnet-dbus-perl
+apt -y install apt-transport-https ntpdate socat libnet-telnet-perl libcrypt-rijndael-perl libdatetime-format-strptime-perl libsoap-lite-perl libjson-xs-perl libxml-simple-perl libdigest-md5-file-perl liblwp-protocol-https-perl liblwp-protocol-http-socketunix-perl libio-socket-multicast-perl libcrypt-cbc-perl libcrypt-ecb-perl libtypes-path-tiny-perl librpc-xml-perl libdatetime-perl libmodule-pluggable-perl libreadonly-perl libjson-maybexs-perl
+apt -y install libcryptx-perl avrdude libprotocol-websocket-perl libdigest-crc-perl libcpanel-json-xs-perl libio-socket-inet6-perl libperl-prereqscanner-notquitelite-perl libimage-librsvg-perl
+apt -y install vlan
 
 ntpdate -u de.pool.ntp.org
 
@@ -166,15 +170,16 @@ echo "" >> /boot/config.txt
 echo "# stopp searching for SD-Card after boot" >> /boot/config.txt
 echo "dtoverlay=sdtweak,poll_once" >> /boot/config.txt
 fi
+
 echo ''
 echo 'Step 3:' 
 echo -e '\033[5mFHEM installieren\033[0m'
 echo "=========================="
 echo ''
-sudo wget -qO - http://debian.fhem.de/archive.key | apt-key add -
-echo "deb http://debian.fhem.de/nightly/ /" >> /etc/apt/sources.list
+wget -O- https://debian.fhem.de/archive.key | gpg --dearmor > /usr/share/keyrings/debianfhemde-archive-keyring.gpg
+sudo echo "deb [signed-by=/usr/share/keyrings/debianfhemde-archive-keyring.gpg] https://debian.fhem.de/nightly/ /" >> /etc/apt/sources.list
 sudo apt update
-sudo apt install fhem
+sudo apt install fhem -y
 
 # enable additional admin programs
 echo 'Step 4: Optionales Admin Programm'
@@ -246,13 +251,13 @@ EOT'
 sudo wget -q -O - https://www.pivccu.de/piVCCU/public.key | sudo apt-key add -
 sudo bash -c 'echo "deb https://www.pivccu.de/piVCCU stable main" > /etc/apt/sources.list.d/pivccu.list'
 sudo apt update
-sudo apt install build-essential bison flex libssl-dev
-sudo apt install raspberrypi-kernel-headers pivccu-modules-dkms
-sudo apt install pivccu-modules-raspberrypi
+sudo apt -y install build-essential bison flex libssl-dev
+sudo apt -y install raspberrypi-kernel-headers pivccu-modules-dkms
+sudo apt -y install pivccu-modules-raspberrypi
 sudo sed -i /boot/cmdline.txt -e "s/console=serial0,[0-9]\+ //"
 sudo sed -i /boot/cmdline.txt -e "s/console=ttyAMA0,[0-9]\+ //"
-sudo apt remove dhcpcd5
-sudo apt install bridge-utils
+sudo apt -y remove dhcpcd5
+sudo apt -y install bridge-utils
 sudo bash -c 'cat << EOT > /etc/network/interfaces
 source-directory /etc/network/interfaces.d
 
@@ -286,7 +291,24 @@ fi
 sleep 3
 
 # Hostname setzen
+echo 'Step 7:'
+echo 'Change hostname'
+echo ''
+echo -n -e '\033[7mMöchten Sie den Hostnamen dieses RaspberryPi in fhempi ändern? [J/n]\033[0m'
+echo ''
+echo -n -e '\033[36mDDo you want to change the hostname to fhempi? [Y/n]\033[0m'
+read hostnamedecision
+if [[ $hostnamedecision =~ (J|j|Y|y|z) ]]
+  then
 sudo hostnamectl set-hostname fhempi
+elif [[ $hostnamedecision =~ (n) ]]
+  then
+    echo 'Es wurde nichts verändert'
+    echo -e '\033[36mNo modifications was made\033[0m'
+else
+    echo 'Invalid input!'
+fi
+sleep 3
 
 echo ''
 echo ''
