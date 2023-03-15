@@ -169,6 +169,7 @@ echo "" >> /boot/config.txt
 echo "# stopp searching for SD-Card after boot" >> /boot/config.txt
 echo "dtoverlay=sdtweak,poll_once" >> /boot/config.txt
 fi
+
 echo ''
 echo 'Step 3:' 
 echo -e '\033[5mFHEM installieren\033[0m'
@@ -177,7 +178,7 @@ echo ''
 wget -O- https://debian.fhem.de/archive.key | gpg --dearmor > /usr/share/keyrings/debianfhemde-archive-keyring.gpg
 sudo echo "deb [signed-by=/usr/share/keyrings/debianfhemde-archive-keyring.gpg] https://debian.fhem.de/nightly/ /" >> /etc/apt/sources.list
 sudo apt update
-sudo apt install fhem
+sudo apt install fhem -y
 
 # enable additional admin programs
 echo 'Step 4: Optionales Admin Programm'
